@@ -13,3 +13,7 @@
 | while        |                |
 | return       |                |
 | break        |                |
+
+## Additional functions 
+- sqrt x - return y, where x = y * y
+- 

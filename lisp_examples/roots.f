@@ -20,6 +20,4 @@
                         ((root_x1 a b d) (root_x2 a b D))))))
 
 
-(func name (a b c) 
-      (prog ((D, _) (D1, _)) 
-            (prog ((x1, _) (x2, _)) (foo D D1 x1 x2)))) 
+(print (roots (1 2 3)))
