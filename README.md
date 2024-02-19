@@ -4,12 +4,12 @@
 ## test cases readiness
 | Main Feature | Test case name |
 |--------------|----------------|
-| quote        | element-at     |
+| quote        | collections    |
 | setq         | math           |
-| func         | element-at     |
+| func         | collections    |
 | lambda       | math           |
 | prog         | roots          |
 | cond         | roots          |
 | while        | math           |
-| return       |                |
+| return       | collections    |
 | break        |                |
