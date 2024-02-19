@@ -5,11 +5,11 @@
 | Main Feature | Test case name |
 |--------------|----------------|
 | quote        | element-at     |
-| setq         |                |
+| setq         | math           |
 | func         | element-at     |
-| lambda       |                |
+| lambda       | math           |
 | prog         | roots          |
 | cond         | roots          |
-| while        |                |
+| while        | math           |
 | return       |                |
 | break        |                |
