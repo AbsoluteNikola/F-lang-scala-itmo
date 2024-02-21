@@ -12,7 +12,7 @@
 | cond         | roots          |
 | while        | math           |
 | return       | collections    |
-| break        |                |
+| break        | collections    |
 
 ## Additional functions 
 - sqrt x - return y, where x = y * y
