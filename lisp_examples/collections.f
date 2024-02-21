@@ -28,3 +28,12 @@
 			(setq cur_ls (tail ls)))))
 	false)
 	
+(func get-at (ls i)
+	(cond (less i 0)
+		(null)
+		((setq cur_ls ls)
+			(while (not (isnull (head cur_ls)))
+				(cond (eq i 0)
+					(break)
+					(setq cut_ls (tail cur_ls))))
+			(head cur_ls))))
