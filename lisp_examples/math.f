@@ -14,7 +14,7 @@
 	(setq sum 1)
 	(setq prev 1)
 	(while (less n 100)
-		(setq prev (eval (sqrt_iter prev n)))
+		(setq prev (sqrt_iter prev n))
 		(setq sum (plus sum prev))
 		(setq n (plus n 1)))
 	sum))
