@@ -10,7 +10,7 @@
 	((setq h (head ls))
 	(cond (isnull h)
 		()
-		(cond (eval pred h)
+		(cond (pred h)
 			(cons h (filter (tail ls) pred))
 			(filter (tail ls) pred)))))
 
@@ -18,7 +18,7 @@
 	((setq h (head ls))
 	(cond (isnull h)
 		()
-		(cons (eval (fun h)) (map (tail ls) fun)))))
+		(cons (fun h) (map (tail ls) fun)))))
 		
 (func contains (ls x)
 	((setq cur_ls ls)
@@ -37,3 +37,6 @@
 					(break)
 					(setq cut_ls (tail cur_ls))))
 			(head cur_ls))))
+
+(func plus_x (ls x)
+  (map ls (lambda y (plus x y))

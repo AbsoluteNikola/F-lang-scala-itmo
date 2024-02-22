@@ -1,5 +1,8 @@
 # F-lang-scala-itmo
-))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
+```lisp
+(show meme) 
+```
+![meme](./meme/img.png)
 
 ## test cases readiness
 | Main Feature | Test case name |

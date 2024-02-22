@@ -14,6 +14,6 @@ def main(): Unit =
   println(rules.mkString("Array(", ", ", ")"))
   tokenStream.getTokens.forEach(
     t => if t.getType != -1
-            then println(s"${rules.apply(t.getType - 1)} ${t.getText} ${t.getLine}:${t.getCharPositionInLine} ${t.getType}}")
+            then println(s"${rules.apply(t.getType - 1)} ${t.getText} ${t.getLine}:${t.getCharPositionInLine}")
             else println("EOF")
       )
