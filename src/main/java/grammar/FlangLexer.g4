@@ -9,7 +9,7 @@ IDENTIFIER : ((LETTER (LETTER | DIGIT)*)) ;
 OP : '(' ;
 CP : ')' ;
 
-NUMBER : (DIGIT)+ ;
+NUMBER : '-'? (DIGIT)+ ;
 DIGIT : '0'..'9';
 
 LETTER : LOWER | UPPER ;
