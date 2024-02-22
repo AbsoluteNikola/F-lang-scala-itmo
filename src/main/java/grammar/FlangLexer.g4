@@ -25,10 +25,5 @@ WHILE : 'while';
 RETURN : 'return';
 BREAK : 'break';
 
-LETTER : LOWER | UPPER ;
-
-LOWER : ('a'..'z') ;
-UPPER : ('A'..'Z') ;
-
 ID : [a-zA-Z_][a-zA-Z_0-9]* ;
 WS : [ \t\n\r\f]+ -> skip ;
