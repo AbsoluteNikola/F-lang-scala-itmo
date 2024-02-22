@@ -4,18 +4,26 @@ lexer grammar FlangLexer;
    package org.lambda.flang.grammar;
 }
 
-IDENTIFIER : ((LETTER (LETTER | DIGIT)*)) ;
-
 OP : '(' ;
 CP : ')' ;
 
-NUMBER : '-'? (DIGIT)+ ;
 DIGIT : '0'..'9';
+INTEGER : '-'? (DIGIT)+ ;
+REAL: '-'? (DIGIT)+ '.' (DIGIT)+;
+NULL : 'null';
+TRUE : 'true';
+FALSE : 'false';
 
-LETTER : LOWER | UPPER ;
+// keywords
 
-LOWER : ('a'..'z') ;
-UPPER : ('A'..'Z') ;
+SETQ : 'setq';
+FUNC : 'func';
+LAMBDA : 'lambda';
+PROG : 'prog';
+COND : 'cond';
+WHILE : 'while';
+RETURN : 'return';
+BREAK : 'break';
 
 ID : [a-zA-Z_][a-zA-Z_0-9]* ;
 WS : [ \t\n\r\f]+ -> skip ;
