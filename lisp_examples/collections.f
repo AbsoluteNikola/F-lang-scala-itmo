@@ -39,4 +39,4 @@
 			(head cur_ls))))
 
 (func plus_x (ls x)
-  (map ls (lambda y (plus x y))
+  (map ls (lambda (y) (plus x y))))

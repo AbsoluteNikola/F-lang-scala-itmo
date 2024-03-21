@@ -1,5 +1,8 @@
 // Generated from src/main/java/grammar/FlangParser.g4 by ANTLR 4.13.1
 
+   package org.lambda.flang.grammar;
+
+
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
