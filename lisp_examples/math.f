@@ -44,4 +44,4 @@
 			((while (less i 0)
 				((setq i (plus i 1))
 				(setq res (devide res x))))
-			(return res)))))
+			(return res))))))

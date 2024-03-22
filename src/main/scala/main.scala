@@ -1,19 +1,14 @@
 package org.lambda.flang
 
-import grammar.{FlangLexer, FlangParser}
-import collection.mutable.*
-import org.antlr.v4.runtime.{CharStreams, CommonTokenStream, CommonToken}
+import grammar.FlangLexer
+import grammar.FlangParser
+import org.antlr.v4.runtime.{CharStreams, CommonTokenStream}
 
 @main
 def main(): Unit =
-  val charStream = CharStreams.fromFileName("lisp_examples/math.f")
+  val charStream = CharStreams.fromFileName("lisp_examples/roots.f")
   val lexer = FlangLexer(charStream)
   val tokenStream = CommonTokenStream(lexer)
   val rules = FlangLexer.ruleNames
-  tokenStream.fill();
-  println(rules.mkString("Array(", ", ", ")"))
-  tokenStream.getTokens.forEach(
-    t => if t.getType != -1
-            then println(s"${rules.apply(t.getType - 1)} ${t.getText} ${t.getLine}:${t.getCharPositionInLine}")
-            else println("EOF")
-      )
+  val parser = FlangParser(tokenStream)
+  println(parser.program().toStringTree(parser))
