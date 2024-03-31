@@ -9,27 +9,30 @@ import org.antlr.v4.runtime.tree.{ErrorNode, ParseTree, RuleNode, TerminalNode}
 import scala.collection.immutable as c
 import scala.jdk.CollectionConverters.*
 
-sealed trait Ast()
+case class Position(line: Int, positionInLine: Int)
+sealed trait Ast(ctx: ParserRuleContext) {
+  def position: Position = Position(ctx.start.getLine, ctx.start.getCharPositionInLine)
+}
 
-final case class Program(elements: List[Ast], ctx: ParserRuleContext) extends Ast
-final case class FList(elements: List[Ast], ctx: ParserRuleContext) extends Ast
-final case class BooleanConst(value: Boolean, ctx: ParserRuleContext) extends Ast
-final case class NullConst(ctx: ParserRuleContext) extends Ast
-final case class IntegerConst(value: Int, ctx: ParserRuleContext) extends Ast
-final case class RealConst(value: Double, ctx: ParserRuleContext) extends Ast
-final case class Quoted(node: Ast, ctx: ParserRuleContext) extends Ast
-final case class Atom(value: String, ctx: ParserRuleContext) extends Ast
-final case class Setq(name: Atom, value: Ast, ctx: ParserRuleContext) extends Ast
-final case class Func(name: String, args: List[Atom], body: Ast, ctx: ParserRuleContext) extends Ast
-final case class Lambda(args: List[Atom], body: Ast, ctx: ParserRuleContext) extends Ast
+final case class Program(elements: List[Ast], ctx: ParserRuleContext) extends Ast(ctx)
+final case class FList(elements: List[Ast], ctx: ParserRuleContext) extends Ast(ctx)
+final case class BooleanConst(value: Boolean, ctx: ParserRuleContext) extends Ast(ctx)
+final case class NullConst(ctx: ParserRuleContext) extends Ast(ctx)
+final case class IntegerConst(value: Int, ctx: ParserRuleContext) extends Ast(ctx)
+final case class RealConst(value: Double, ctx: ParserRuleContext) extends Ast(ctx)
+final case class Quoted(node: Ast, ctx: ParserRuleContext) extends Ast(ctx)
+final case class Atom(value: String, ctx: ParserRuleContext) extends Ast(ctx)
+final case class Setq(name: Atom, value: Ast, ctx: ParserRuleContext) extends Ast(ctx)
+final case class Func(name: String, args: List[Atom], body: Ast, ctx: ParserRuleContext) extends Ast(ctx)
+final case class Lambda(args: List[Atom], body: Ast, ctx: ParserRuleContext) extends Ast(ctx)
 final case class Prog(
    context: List[(Atom, Ast)], // list of new variables that will be appeared in body
-   body: Ast
- , ctx: ParserRuleContext) extends Ast
-final case class Cond(pred: Ast, `then`: Ast, `else`: Option[Ast], ctx: ParserRuleContext) extends Ast
-final case class While(pred: Ast, body: Ast, ctx: ParserRuleContext) extends Ast
-final case class Return(element: Ast, ctx: ParserRuleContext) extends Ast
-final case class Break(ctx: ParserRuleContext) extends Ast
+   body: Ast,
+   ctx: ParserRuleContext) extends Ast(ctx)
+final case class Cond(pred: Ast, `then`: Ast, `else`: Option[Ast], ctx: ParserRuleContext) extends Ast(ctx)
+final case class While(pred: Ast, body: Ast, ctx: ParserRuleContext) extends Ast(ctx)
+final case class Return(element: Ast, ctx: ParserRuleContext) extends Ast(ctx)
+final case class Break(ctx: ParserRuleContext) extends Ast(ctx)
 
 object Ast {
 
