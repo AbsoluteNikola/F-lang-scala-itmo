@@ -67,6 +67,54 @@ public class FlangParserBaseListener implements FlangParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterSpecial_form(FlangParser.Special_formContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSpecial_form(FlangParser.Special_formContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAtoms_list(FlangParser.Atoms_listContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAtoms_list(FlangParser.Atoms_listContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterProg_context(FlangParser.Prog_contextContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitProg_context(FlangParser.Prog_contextContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAtom(FlangParser.AtomContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAtom(FlangParser.AtomContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterQuote(FlangParser.QuoteContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -74,6 +122,18 @@ public class FlangParserBaseListener implements FlangParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitQuote(FlangParser.QuoteContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterQuote_short(FlangParser.Quote_shortContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitQuote_short(FlangParser.Quote_shortContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -158,6 +218,18 @@ public class FlangParserBaseListener implements FlangParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitReturn(FlangParser.ReturnContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBreak(FlangParser.BreakContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBreak(FlangParser.BreakContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

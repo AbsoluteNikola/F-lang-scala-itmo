@@ -21,12 +21,12 @@
 		(cons (fun h) (map (tail ls) fun)))))
 		
 (func contains (ls x)
-	((setq cur_ls ls)
+	(((setq cur_ls ls)
 	(while (not (isnull (head cur_ls)))
 		(cond (eq (head ls) x)
 			(return true)
 			(setq cur_ls (tail ls)))))
-	false)
+	false))
 	
 (func get-at (ls i)
 	(cond (less i 0)

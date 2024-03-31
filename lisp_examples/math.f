@@ -14,9 +14,9 @@
 	(setq sum 1)
 	(setq prev 1)
 	(while (less n 100)
-		(setq prev (sqrt_iter prev n))
-		(setq sum (plus sum prev))
-		(setq n (plus n 1)))
+	    ((setq prev (sqrt_iter prev n))
+		 (setq sum (plus sum prev))
+		 (setq n (plus n 1))))
 	sum))
 
 (func max (a b)
