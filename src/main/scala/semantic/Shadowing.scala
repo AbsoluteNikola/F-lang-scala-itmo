@@ -2,7 +2,7 @@ package org.lambda.flang
 package semantic
 import scala.collection.mutable.{Map => MuttableMap}
 
-sealed trait Warning
+trait Warning
 
 final case class ShadowingWarning(oldValue: Ast, newValue: Atom) extends Warning {
   override def toString: String =

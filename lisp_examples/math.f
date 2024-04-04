@@ -7,7 +7,7 @@
 		(lambda (prev n) 
 			(times 
 				prev 
-				(devide 
+				(divide
 					(minus 1 (times 2 n))
 					(times 2 (plus n 1))))))
 	(setq n 1)
@@ -34,7 +34,7 @@
 
 (func pow (x i)
 	((setq res 1)
-	(cond (eq i 0)
+	(cond (equal i 0)
 		(res)
 		(cond (greater i 0)
 			((while (greater i 0)
@@ -43,5 +43,5 @@
 			(return res))
 			((while (less i 0)
 				((setq i (plus i 1))
-				(setq res (devide res x))))
+				(setq res (divide res x))))
 			(return res))))))
