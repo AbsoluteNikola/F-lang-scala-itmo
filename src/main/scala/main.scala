@@ -20,6 +20,6 @@ def main(): Unit =
   println("Variables shadowing check:")
   shadowing.foreach(println)
 
-  val notDeclaratedWarnings = semantic.checkForNotDeclarated(ast)
+  val notDeclaredWarnings = semantic.checkForNotDeclared(ast)
   println("Atoms are not declarated check:")
-  notDeclaratedWarnings.foreach(println)
+  notDeclaredWarnings.foreach(println)

@@ -34,8 +34,7 @@ final case class While(pred: Ast, body: Ast, ctx: ParserRuleContext) extends Ast
 final case class Return(element: Ast, ctx: ParserRuleContext) extends Ast(ctx)
 final case class Break(ctx: ParserRuleContext) extends Ast(ctx)
 
-object Ast {
-
+object Ast:
   def fromAntlr(flangParser: FlangParser): Ast = flangParser.program().accept(AntlrAstVisitor())
 
   private class AntlrAstVisitor extends FlangParserVisitor[Ast]:
@@ -140,4 +139,3 @@ object Ast {
       atoms.zip(values)
 
     override def visitBreak(ctx: FlangParser.BreakContext): Ast = Break(ctx)
-}

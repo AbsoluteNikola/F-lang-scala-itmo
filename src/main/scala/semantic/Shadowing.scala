@@ -4,11 +4,10 @@ import scala.collection.mutable.{Map => MuttableMap}
 
 trait Warning
 
-final case class ShadowingWarning(oldValue: Ast, newValue: Atom) extends Warning {
+final case class ShadowingWarning(oldValue: Ast, newValue: Atom) extends Warning:
   override def toString: String =
     s"Variable '${newValue.value}' from ${oldValue.position.line}:${oldValue.position.positionInLine + 1}" +
     s" was shadowed by new variable at ${newValue.position.line}:${newValue.position.positionInLine + 1}"
-}
 
 def checkShadowing(ast: Ast): List[ShadowingWarning] = traverse(MuttableMap.empty, ast)
 
