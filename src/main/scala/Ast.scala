@@ -11,7 +11,7 @@ import scala.jdk.CollectionConverters.*
 
 sealed trait Position
 final case class FilePosition(line: Int, positionInLine: Int) extends Position:
-  override def toString: String = s"$line:${positionInLine + 1}}"
+  override def toString: String = s"$line:${positionInLine + 1}"
 final case class NoPosition() extends Position:
   override def toString: String = "no position"
 
