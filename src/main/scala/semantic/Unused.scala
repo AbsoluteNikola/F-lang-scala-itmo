@@ -5,16 +5,16 @@ import scala.collection.mutable.Map as MuttableMap
 
 final case class AtomUnusedWarning(unused: Ast) extends Warning:
   override def toString: String =
-    s"Object from ${unused.position.line}:${unused.position.positionInLine + 1} is unused."
+    s"Object from ${unused.position} is unused."
 
 def checkForUnused(ast: Ast): List[AtomUnusedWarning] =
   traverse_u(MuttableMap.empty, ast)
 
 private def traverse_u(context: MuttableMap[String, Ast], ast: Ast): List[AtomUnusedWarning] = ast match
-  case _: BooleanConst => List.empty
-  case _: NullConst => List.empty
-  case _: IntegerConst => List.empty
-  case _: RealConst => List.empty
+  case _: BooleanF => List.empty
+  case _: Null => List.empty
+  case _: Integer => List.empty
+  case _: Real => List.empty
   case atom: Atom =>
     context.remove(atom.value)
     List.empty

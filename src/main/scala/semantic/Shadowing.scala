@@ -6,16 +6,16 @@ trait Warning
 
 final case class ShadowingWarning(oldValue: Ast, newValue: Atom) extends Warning:
   override def toString: String =
-    s"Variable '${newValue.value}' from ${oldValue.position.line}:${oldValue.position.positionInLine + 1}" +
-    s" was shadowed by new variable at ${newValue.position.line}:${newValue.position.positionInLine + 1}"
+    s"Variable '${newValue.value}' from ${oldValue.position}" +
+    s" was shadowed by new variable at ${newValue.position}"
 
 def checkShadowing(ast: Ast): List[ShadowingWarning] = traverse(MuttableMap.empty, ast)
 
 private def traverse(context: MuttableMap[String, Ast], ast: Ast): List[ShadowingWarning] = ast match
-  case _: BooleanConst => List.empty
-  case _: NullConst => List.empty
-  case _: IntegerConst => List.empty
-  case _: RealConst => List.empty
+  case _: BooleanF => List.empty
+  case _: Null => List.empty
+  case _: Integer => List.empty
+  case _: Real => List.empty
   case _: Atom => List.empty
   case _: Break => List.empty
   case program: Program => program.elements.flatMap(traverse(context, _))

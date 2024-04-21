@@ -10,17 +10,17 @@ val defaultAtoms = Set(
 
 final case class AtomNotDeclaredWarning(unexpected: Atom) extends Warning:
   override def toString: String =
-    s"Atom '${unexpected.value}' from ${unexpected.position.line}:${unexpected.position.positionInLine + 1}" +
+    s"Atom '${unexpected.value}' from ${unexpected.position}" +
       s" is not declared."
 
 def checkForNotDeclared(ast: Ast): List[AtomNotDeclaredWarning] =
   traverse_nd(MuttableMap.empty, ast)
 
 private def traverse_nd(context: MuttableMap[String, Ast], ast: Ast): List[AtomNotDeclaredWarning] = ast match
-  case _: BooleanConst => List.empty
-  case _: NullConst => List.empty
-  case _: IntegerConst => List.empty
-  case _: RealConst => List.empty
+  case _: BooleanF => List.empty
+  case _: Null => List.empty
+  case _: Integer => List.empty
+  case _: Real => List.empty
   case atom: Atom => checkAtomDeclaration(context, atom) match
     case Some(warning) => List(warning)
     case _ => List.empty
