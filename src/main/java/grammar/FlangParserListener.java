@@ -50,6 +50,46 @@ public interface FlangParserListener extends ParseTreeListener {
 	 */
 	void exitLiteral(FlangParser.LiteralContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link FlangParser#special_form}.
+	 * @param ctx the parse tree
+	 */
+	void enterSpecial_form(FlangParser.Special_formContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FlangParser#special_form}.
+	 * @param ctx the parse tree
+	 */
+	void exitSpecial_form(FlangParser.Special_formContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FlangParser#atoms_list}.
+	 * @param ctx the parse tree
+	 */
+	void enterAtoms_list(FlangParser.Atoms_listContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FlangParser#atoms_list}.
+	 * @param ctx the parse tree
+	 */
+	void exitAtoms_list(FlangParser.Atoms_listContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FlangParser#prog_context}.
+	 * @param ctx the parse tree
+	 */
+	void enterProg_context(FlangParser.Prog_contextContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FlangParser#prog_context}.
+	 * @param ctx the parse tree
+	 */
+	void exitProg_context(FlangParser.Prog_contextContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FlangParser#atom}.
+	 * @param ctx the parse tree
+	 */
+	void enterAtom(FlangParser.AtomContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FlangParser#atom}.
+	 * @param ctx the parse tree
+	 */
+	void exitAtom(FlangParser.AtomContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link FlangParser#quote}.
 	 * @param ctx the parse tree
 	 */
@@ -59,6 +99,16 @@ public interface FlangParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitQuote(FlangParser.QuoteContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FlangParser#quote_short}.
+	 * @param ctx the parse tree
+	 */
+	void enterQuote_short(FlangParser.Quote_shortContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FlangParser#quote_short}.
+	 * @param ctx the parse tree
+	 */
+	void exitQuote_short(FlangParser.Quote_shortContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link FlangParser#setq}.
 	 * @param ctx the parse tree
@@ -129,6 +179,16 @@ public interface FlangParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitReturn(FlangParser.ReturnContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FlangParser#break}.
+	 * @param ctx the parse tree
+	 */
+	void enterBreak(FlangParser.BreakContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FlangParser#break}.
+	 * @param ctx the parse tree
+	 */
+	void exitBreak(FlangParser.BreakContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link FlangParser#list}.
 	 * @param ctx the parse tree

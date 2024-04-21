@@ -17,7 +17,7 @@
                   nil
                   (cond (equal D 0)
                         (root_x1 a b D)
-                        ((root_x1 a b d) (root_x2 a b D))))))
+                        ((root_x1 a b D) (root_x2 a b D))))))
 
 
 (print (roots (1 2 3)))
