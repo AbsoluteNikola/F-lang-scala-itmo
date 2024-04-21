@@ -23,3 +23,7 @@ def main(): Unit =
   val notDeclaredWarnings = semantic.checkForNotDeclared(ast)
   println("Atoms are not declarated check:")
   notDeclaredWarnings.foreach(println)
+
+  val unusedWarnings = semantic.checkForUnused(ast)
+  println("Declared but unused atoms check:")
+  unusedWarnings.foreach(println)

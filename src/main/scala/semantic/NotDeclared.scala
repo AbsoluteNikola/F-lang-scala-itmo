@@ -14,9 +14,9 @@ final case class AtomNotDeclaredWarning(unexpected: Atom) extends Warning:
       s" is not declared."
 
 def checkForNotDeclared(ast: Ast): List[AtomNotDeclaredWarning] =
-  traverse(MuttableMap.empty, ast)
+  traverse_nd(MuttableMap.empty, ast)
 
-private def traverse(context: MuttableMap[String, Ast], ast: Ast): List[AtomNotDeclaredWarning] = ast match
+private def traverse_nd(context: MuttableMap[String, Ast], ast: Ast): List[AtomNotDeclaredWarning] = ast match
   case _: BooleanConst => List.empty
   case _: NullConst => List.empty
   case _: IntegerConst => List.empty
@@ -25,35 +25,35 @@ private def traverse(context: MuttableMap[String, Ast], ast: Ast): List[AtomNotD
     case Some(warning) => List(warning)
     case _ => List.empty
   case _: Break => List.empty
-  case program: Program => program.elements.flatMap(traverse(context, _))
+  case program: Program => program.elements.flatMap(traverse_nd(context, _))
   case list: FList =>
     val ctxCopy = context.clone()
-    list.elements.flatMap(traverse(ctxCopy, _))
+    list.elements.flatMap(traverse_nd(ctxCopy, _))
   case quoted: Quoted =>
-    traverse(context, quoted.node)
+    traverse_nd(context, quoted.node)
   case cond: Cond =>
-    traverse(context, cond.pred) ++
-      traverse(context, cond.`then`) ++
-      cond.`else`.toList.flatMap(traverse(context, _))
+    traverse_nd(context, cond.pred) ++
+      traverse_nd(context, cond.`then`) ++
+      cond.`else`.toList.flatMap(traverse_nd(context, _))
   case fWhile: While =>
-    traverse(context, fWhile.pred) ++ traverse(context, fWhile.body)
-  case fReturn: Return => traverse(context, fReturn.element)
+    traverse_nd(context, fWhile.pred) ++ traverse_nd(context, fWhile.body)
+  case fReturn: Return => traverse_nd(context, fReturn.element)
   case setq: Setq =>
     context.put(setq.name.value, setq.name)
-    traverse(context, setq.value)
+    traverse_nd(context, setq.value)
   case func: Func =>
     context.put(func.name, func)
     val ctxCopy = context.clone()
     func.args.foreach(x => ctxCopy.put(x.value, x))
-    traverse(ctxCopy, func.body)
+    traverse_nd(ctxCopy, func.body)
   case lambda: Lambda =>
     val ctxCopy = context.clone()
     lambda.args.foreach(a => ctxCopy.put(a.value, a))
-    traverse(ctxCopy, lambda.body)
+    traverse_nd(ctxCopy, lambda.body)
   case prog: Prog =>
     val ctxCopy = context.clone()
     prog.context.foreach(v => ctxCopy.put(v._1.value, v._1))
-    traverse(ctxCopy, prog.body)
+    traverse_nd(ctxCopy, prog.body)
 
 private def checkAtomDeclaration(context: MuttableMap[String, Ast], atom: Atom): Option[AtomNotDeclaredWarning] =
   context.get(atom.value) match
