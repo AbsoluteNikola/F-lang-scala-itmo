@@ -6,7 +6,7 @@ import grammar.FlangParser
 import org.antlr.v4.runtime.{CharStreams, CommonTokenStream}
 import semantic.checkShadowing
 
-import org.lambda.flang.interpreter.FlangException
+import interpreter.FlangException
 
 def runParser(fileName: String): FlangParser =
   val charStream = CharStreams.fromFileName(fileName)
@@ -24,14 +24,14 @@ def main(): Unit =
   shadowing.foreach(println)
 
   val notDeclaredWarnings = semantic.checkForNotDeclared(ast)
-  println("Atoms are not declarated check:")
+  println("\nAtoms are not declarated check:")
   notDeclaredWarnings.foreach(println)
 
   val unusedWarnings = semantic.checkForUnused(ast)
-  println("Declared but unused atoms check:")
+  println("\nDeclared but unused atoms check:")
   unusedWarnings.foreach(println)
 
-  println("Running interpreter")
+  println("\nRunning interpreter")
   try {
     val res = interpreter.run(ast)
     println(s"Result: $res")

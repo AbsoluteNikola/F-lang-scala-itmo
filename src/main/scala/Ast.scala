@@ -23,9 +23,9 @@ sealed trait Ast(ctx: Option[ParserRuleContext]) {
 
 final class Program(val elements: List[Ast], ctx: ParserRuleContext) extends Ast(Some(ctx)):
   override def toString: String = elements.mkString("\n\n")
-final class FList(val elements: List[Ast], ctx: ParserRuleContext) extends Ast(Some(ctx)):
+final class FList(val elements: List[Ast], ctx: Option[ParserRuleContext]) extends Ast(ctx):
   override def toString: String = s"(${elements.mkString(" ")})"
-final class BooleanF(val value: Boolean, ctx: Option[ParserRuleContext]) extends Ast(ctx):
+final class FBoolean(val value: Boolean, ctx: Option[ParserRuleContext]) extends Ast(ctx):
   override def toString: String = s"$value"
 final class Null(ctx: Option[ParserRuleContext]) extends Ast(ctx):
   override def toString: String = "null"
@@ -92,8 +92,8 @@ object Ast:
 
     override def visitBoolean_const(ctx: FlangParser.Boolean_constContext): Ast =
       if ctx.TRUE() != null
-        then BooleanF(true, Some(ctx))
-        else BooleanF(false, Some(ctx))
+        then FBoolean(true, Some(ctx))
+        else FBoolean(false, Some(ctx))
 
     override def visitLiteral(ctx: FlangParser.LiteralContext): Ast =
       if ctx.NULL() != null then Null(Some(ctx))
@@ -142,7 +142,7 @@ object Ast:
 
     override def visitList(ctx: FlangParser.ListContext): Ast =
       val elements = ctx.element().asScala.map(_.accept(this)).toList
-      FList(elements, ctx)
+      FList(elements, Some(ctx))
 
     override def visitSpecial_form(ctx: FlangParser.Special_formContext): Ast =
       ctx.children.get(0).accept(this);

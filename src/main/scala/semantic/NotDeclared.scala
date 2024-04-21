@@ -17,7 +17,7 @@ def checkForNotDeclared(ast: Ast): List[AtomNotDeclaredWarning] =
   traverse_nd(MuttableMap.empty, ast)
 
 private def traverse_nd(context: MuttableMap[String, Ast], ast: Ast): List[AtomNotDeclaredWarning] = ast match
-  case _: BooleanF => List.empty
+  case _: FBoolean => List.empty
   case _: Null => List.empty
   case _: Integer => List.empty
   case _: Real => List.empty

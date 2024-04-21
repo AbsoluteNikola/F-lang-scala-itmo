@@ -12,7 +12,7 @@ final case class ShadowingWarning(oldValue: Ast, newValue: Atom) extends Warning
 def checkShadowing(ast: Ast): List[ShadowingWarning] = traverse(MuttableMap.empty, ast)
 
 private def traverse(context: MuttableMap[String, Ast], ast: Ast): List[ShadowingWarning] = ast match
-  case _: BooleanF => List.empty
+  case _: FBoolean => List.empty
   case _: Null => List.empty
   case _: Integer => List.empty
   case _: Real => List.empty

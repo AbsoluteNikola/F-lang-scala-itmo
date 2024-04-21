@@ -22,5 +22,17 @@ class Env {
 
 object Env:
   private def defaultEnv: MuttableMap[String, Ast] = MuttableMap(
-    "plus" -> StdFunction("plus", std.plus)
+    "plus" -> StdFunction("plus", std.plus),
+    "times" -> StdFunction("times", std.times),
+    "head" -> StdFunction("head", std.head),
+    "tail" -> StdFunction("tail", std.tail),
+    "cons" -> StdFunction("cons", std.cons),
+    "eval" -> StdFunction("eval", std.cons),
+    "isint"  -> StdFunction("isint",  std.isInt),
+    "isReal" -> StdFunction("isReal", std.isReal),
+    "isbool" -> StdFunction("isbool", std.isBool),
+    "isnull" -> StdFunction("isnull", std.isNull),
+    "isatom" -> StdFunction("isatom", std.isAtom),
+    "islist" -> StdFunction("islist", std.isList),
+    "print" -> StdFunction("print", std.isList),
   )

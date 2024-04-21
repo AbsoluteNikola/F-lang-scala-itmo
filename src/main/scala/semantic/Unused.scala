@@ -11,7 +11,7 @@ def checkForUnused(ast: Ast): List[AtomUnusedWarning] =
   traverse_u(MuttableMap.empty, ast)
 
 private def traverse_u(context: MuttableMap[String, Ast], ast: Ast): List[AtomUnusedWarning] = ast match
-  case _: BooleanF => List.empty
+  case _: FBoolean => List.empty
   case _: Null => List.empty
   case _: Integer => List.empty
   case _: Real => List.empty
