@@ -1,5 +1,5 @@
+(func plus1 (a) (plus a 1))
+
 (prog
-   ((a 1) (b 2))
-   (prog
-      ((a 1) (b 5) (c 4))
-      (plus a b)))
+   ((a 1))
+   (plus1 a))

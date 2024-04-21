@@ -13,6 +13,9 @@ class NoSuchAtom(val name: String) extends FlangException:
 class NotAFunction(val value: Ast) extends FlangException:
   override def toString: String = s"'$value' is not a function"
 
+class WrongType(element: String, typ: String, val node: Ast) extends FlangException:
+  override def toString: String = s"$element should be of type $typ not $node"
+
 class WrongArgumentType(val functionName: String, index: Int, typ: String) extends FlangException:
   override def toString: String = s"$index argument of function '$functionName' should be $typ"
 

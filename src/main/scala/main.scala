@@ -18,7 +18,10 @@ def runParser(fileName: String): FlangParser =
 def main(): Unit =
   val parser = runParser("lisp_examples/test.f")
   val ast = Ast.fromAntlr(parser)
-
+  if parser.getNumberOfSyntaxErrors > 0
+    then
+      println("Parer failed")
+      sys.exit(1)
   val shadowing = semantic.checkShadowing(ast)
   println("Variables shadowing check:")
   shadowing.foreach(println)

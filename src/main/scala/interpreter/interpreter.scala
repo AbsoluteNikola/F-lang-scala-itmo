@@ -3,8 +3,6 @@ package interpreter
 
 import org.lambda.flang.StdFunction
 
-import scala.annotation.internal.Body
-
 def run(ast: Ast): Ast = eval(ast, Env())
 
 private def eval(evalNode: Ast, env: Env): Ast = evalNode match
@@ -33,12 +31,47 @@ private def eval(evalNode: Ast, env: Env): Ast = evalNode match
       val args = list.elements.tail.map(eval(_, env))
       func match
         case f: StdFunction => f.evaluator(args)
-        case f: Lambda => ???
-        case f: Func => ???
+        case f: Lambda => applyFunction(
+          functionName = "lambda",
+          argsName = f.args,
+          args = args,
+          body = f.body,
+          env = env,
+        )
+        case f: Func => applyFunction(
+          functionName = f.name,
+          argsName = f.args,
+          args = args,
+          body = f.body,
+          env = env,
+        )
         case n => throw NotAFunction(n)
   case quoted: Quoted => quoted.node
-  case cond: Cond => ???
-  case fWhile: While => ???
+  case cond: Cond =>
+    val pred = eval(cond.pred, env) match
+      case b: FBoolean => b.value
+      case other => throw WrongType("predicate of if", "boolean", other)
+    cond.`else` match
+      case Some(e) => if pred
+        then eval(cond.`then`, env)
+        else eval(e, env)
+      case None =>
+        if pred then eval(cond.`then`, env)
+        new Null(None)
+
+  case fWhile: While =>
+    while
+      true
+    do
+      val pred = eval(fWhile.pred, env) match
+        case b: FBoolean => b.value
+        case other => throw WrongType("predicate of while", "boolean", other)
+      try
+        eval(fWhile.body, env)
+      catch
+        case _: BreakException => return Null(None)
+    Null(None)
+
   case fReturn: Return =>
     val res = eval(fReturn.element, env)
     throw ReturnException(res)
@@ -47,12 +80,20 @@ private def eval(evalNode: Ast, env: Env): Ast = evalNode match
     env.set(setq.name.value, v)
     Null(None)
 
-  case func: Func => func
-  case lambda: Lambda => lambda
+  case func: Func => func // todo: pass context?
+  case lambda: Lambda => lambda // todo: pass context?
   case prog: Prog =>
     env.withTerms(
       terms = prog.context.map((name, node) => (name.value, eval(node, env))),
       f = eval.curried(prog.body)
     )
+  case function: StdFunction => function
 
-private def applyFunction(argsName: List[Atom], args: List[Atom], body: Body) = ???
+private def applyFunction(functionName: String, argsName: List[Atom], args: List[Ast], body: Ast, env: Env): Ast =
+  if argsName.length != args.length
+    then throw WrongArgumentsCount(functionName, argsName.length, args.length)
+  val terms = argsName.map(_.value).zip(args)
+  try
+    env.withTerms(terms = terms, f = newEnv => eval(body, newEnv))
+  catch
+    case e: ReturnException => e.value

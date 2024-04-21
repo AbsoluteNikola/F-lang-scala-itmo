@@ -15,9 +15,11 @@ class Env {
     terms.foreach(
       (name, value) => context.put(name, value)
     )
-    val result = f(this)
-    oldValues.foreach((name, value) => context.put(name, value))
-    result
+    try
+      val result = f(this)
+      result
+    finally
+      oldValues.foreach((name, value) => context.put(name, value))
 }
 
 object Env:
