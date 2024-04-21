@@ -5,6 +5,7 @@ import grammar.{FlangParser, FlangParserVisitor}
 
 import org.antlr.v4.runtime.{ParserRuleContext, Token}
 import org.antlr.v4.runtime.tree.{ErrorNode, ParseTree, RuleNode, TerminalNode}
+import org.lambda.flang.interpreter.Env
 
 import scala.collection.immutable as c
 import scala.jdk.CollectionConverters.*
@@ -40,10 +41,11 @@ final class Atom(val value: String, ctx: ParserRuleContext) extends Ast(Some(ctx
 final class Setq(val name: Atom, val value: Ast, ctx: ParserRuleContext) extends Ast(Some(ctx)):
   override def toString: String = s"setq $name $value"
 
-final class Func(val name: String, val args: List[Atom], val body: Ast, ctx: ParserRuleContext) extends Ast(Some(ctx)):
+final class Func(val name: String, val args: List[Atom], val body: Ast, ctx: ParserRuleContext, var executionEnv: Env) extends Ast(Some(ctx)):
   override def toString: String = s"func $name (${args.mkString(" ")}) (...)"
-final class Lambda(val args: List[Atom], val body: Ast, ctx: ParserRuleContext) extends Ast(Some(ctx)):
+final class Lambda(val args: List[Atom], val body: Ast, ctx: ParserRuleContext, var executionEnv: Env) extends Ast(Some(ctx)):
   override def toString: String = s"lambda (${args.mkString(" ")}) (...)"
+
 final class Prog(
    val context: List[(Atom, Ast)], // list of new variables that will be appeared in body
    val body: Ast,
@@ -114,12 +116,12 @@ object Ast:
       val funcName = ctx.atom().ATOM().getText
       val args = visitAtomsListCustom(ctx.atoms_list())
       val body = ctx.element().accept(this)
-      Func(name = funcName, args = args, body = body, ctx)
+      Func(name = funcName, args = args, body = body, ctx, Env())
 
     override def visitLambda(ctx: FlangParser.LambdaContext): Ast =
       val args = visitAtomsListCustom(ctx.atoms_list())
       val body = ctx.element().accept(this)
-      Lambda(args = args, body = body, ctx)
+      Lambda(args = args, body = body, ctx, Env())
 
     override def visitProg(ctx: FlangParser.ProgContext): Ast =
       val progContext = visitProgContextCustom(ctx.prog_context())

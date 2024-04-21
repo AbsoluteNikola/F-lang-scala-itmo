@@ -16,7 +16,9 @@ private def eval(evalNode: Ast, env: Env): Ast = evalNode match
   case program: Program =>
     var result: Option[Ast] = None
     program.elements.foreach {
-      case f: Func => env.set(f.name, f)
+      case f: Func =>
+        env.set(f.name, f)
+        f.executionEnv = env
       case _ => ()
     }
     program.elements.foreach(node => result = Some(eval(node, env)))
@@ -80,8 +82,12 @@ private def eval(evalNode: Ast, env: Env): Ast = evalNode match
     env.set(setq.name.value, v)
     Null(None)
 
-  case func: Func => func // todo: pass context?
-  case lambda: Lambda => lambda // todo: pass context?
+  case func: Func =>
+    func.executionEnv = env
+    func
+  case lambda: Lambda =>
+    lambda.executionEnv = env
+    lambda
   case prog: Prog =>
     env.withTerms(
       terms = prog.context.map((name, node) => (name.value, eval(node, env))),
