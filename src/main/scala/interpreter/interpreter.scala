@@ -1,13 +1,9 @@
 package org.lambda.flang
 package interpreter
 
-import org.lambda.flang.StdFunction
-
 def run(ast: Ast): Ast = eval(ast, Env())
 
-private def eval(evalNode: Ast, env: Env): Ast =
-//  println(s"Evaluating: $evalNode \nEnv: $env\n")
-  evalNode match
+private def eval(evalNode: Ast, env: Env): Ast = evalNode match
   case x: FBoolean => x
   case x: Null => x
   case x: Integer => x
@@ -85,6 +81,7 @@ private def eval(evalNode: Ast, env: Env): Ast =
     Null(None)
 
   case func: Func =>
+    env.set(func.name, func)
     func.executionEnv = env.copy()
     func
   case lambda: Lambda =>
@@ -96,6 +93,9 @@ private def eval(evalNode: Ast, env: Env): Ast =
       f = eval.curried(prog.body)
     )
   case function: StdFunction => function
+  case d: Do =>
+    val results = d.statements.map(eval(_, env))
+    results.last
 
 private def applyFunction(functionName: String, argsName: List[Atom], args: List[Ast], body: Ast, env: Env): Ast =
 //  println(s"Apply $functionName, args($args), env = $env")

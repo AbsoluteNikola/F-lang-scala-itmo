@@ -5,7 +5,7 @@ import scala.collection.mutable.Map as MuttableMap
 
 final case class AtomUnusedWarning(name: String, node: Ast) extends Warning:
   override def toString: String =
-    s"'${name}' from ${node.position} is unused."
+    s"'$name' from ${node.position} is unused."
 
 def checkForUnused(ast: Ast): List[AtomUnusedWarning] =
   traverse_u(MuttableMap.empty, ast)
@@ -36,6 +36,9 @@ private def traverse_u(context: MuttableMap[String, Ast], ast: Ast): List[AtomUn
   case setq: Setq =>
     context.put(setq.name.value, setq.name)
     traverse_u(context, setq.value)
+  case d: Do =>
+    val ctxCopy = context.clone()
+    d.statements.flatMap(traverse_u(ctxCopy, _))
   case func: Func =>
     context.put(func.name, func)
     func.args.foreach(x => context.put(x.value, x))

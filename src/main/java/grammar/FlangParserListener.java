@@ -170,6 +170,16 @@ public interface FlangParserListener extends ParseTreeListener {
 	 */
 	void exitWhile(FlangParser.WhileContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link FlangParser#do}.
+	 * @param ctx the parse tree
+	 */
+	void enterDo(FlangParser.DoContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FlangParser#do}.
+	 * @param ctx the parse tree
+	 */
+	void exitDo(FlangParser.DoContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link FlangParser#return}.
 	 * @param ctx the parse tree
 	 */

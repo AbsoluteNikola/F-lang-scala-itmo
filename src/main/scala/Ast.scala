@@ -1,11 +1,11 @@
 package org.lambda.flang
 
-import grammar.FlangParser.{ATOM, ElementContext}
+import grammar.FlangParser.ElementContext
 import grammar.{FlangParser, FlangParserVisitor}
 
-import org.antlr.v4.runtime.{ParserRuleContext, Token}
+import org.antlr.v4.runtime.ParserRuleContext
 import org.antlr.v4.runtime.tree.{ErrorNode, ParseTree, RuleNode, TerminalNode}
-import org.lambda.flang.interpreter.{Env, WrongComparison}
+import interpreter.{Env, WrongComparison}
 
 import scala.collection.immutable as c
 import scala.jdk.CollectionConverters.*
@@ -62,6 +62,9 @@ final class Atom(val value: String, ctx: ParserRuleContext) extends Ast(Some(ctx
   override def toString: String = value
 final class Setq(val name: Atom, val value: Ast, ctx: ParserRuleContext) extends Ast(Some(ctx)):
   override def toString: String = s"setq $name $value"
+
+final class Do(val statements: List[Ast], ctx: ParserRuleContext) extends Ast(Some(ctx)):
+  override def toString: String = s"do ${statements.map(s => s"($s) ")}"
 
 final class Func(val name: String, val args: List[Atom], val body: Ast, ctx: ParserRuleContext, var executionEnv: Env) extends Ast(Some(ctx)):
   override def toString: String = s"func $name (${args.mkString(" ")}) (...)"
@@ -189,3 +192,7 @@ object Ast:
       atoms.zip(values)
 
     override def visitBreak(ctx: FlangParser.BreakContext): Ast = Break(ctx)
+
+    override def visitDo(ctx: FlangParser.DoContext): Ast =
+      val statements = ctx.element().asScala.map(_.accept(this)).toList
+      Do(statements, ctx)

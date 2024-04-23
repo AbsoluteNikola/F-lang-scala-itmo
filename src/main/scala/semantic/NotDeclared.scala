@@ -54,6 +54,9 @@ private def traverse_nd(context: MuttableMap[String, Ast], ast: Ast): List[AtomN
     val ctxCopy = context.clone()
     prog.context.foreach(v => ctxCopy.put(v._1.value, v._1))
     traverse_nd(ctxCopy, prog.body)
+  case d: Do =>
+    val ctxCopy = context.clone()
+    d.statements.flatMap(traverse_nd(ctxCopy, _))
 
 private def checkAtomDeclaration(context: MuttableMap[String, Ast], atom: Atom): Option[AtomNotDeclaredWarning] =
   context.get(atom.value) match

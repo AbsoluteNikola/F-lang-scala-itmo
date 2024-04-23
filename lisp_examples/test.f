@@ -1,8 +1,8 @@
-(func plus1 (f) (f 1))
+(func apply1 (a) (a 1))
 
 (prog
-  ((a 1))
+  ((a 3))
   (prog
    ((pa (lambda (x) (plus x a))) (b 3))
-   (plus1 pa)))
+   (apply1 pa)))
 
