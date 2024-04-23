@@ -45,3 +45,36 @@
 				((setq i (plus i 1))
 				(setq res (divide res x))))
 			(return res))))))
+
+(func get_max (a b)
+	(cond (greater a b)
+		(a)
+		(b)))
+
+(func get_min (a b)
+	(cond (greater a b)
+		(b)
+		(a)))
+
+; a, b, c - the sides of the triangle
+; print result
+(prog 
+    ((a 3) (b 4) (c 5)) 
+    ((func is_rightangled (a b c) 
+    (cond (less a 1)
+		(FALSE)
+		(cond (less b 1)
+			(FALSE)
+			(cond (less c 1)
+				(FALSE)
+				(equal 
+					(plus (plus (sqr a) (sqr b)) (sqr c)) 
+					(sqr (get_max (get_max a b) c)))))))
+	(print (is_rightangled a b c))))
+
+; should print always true
+(prog 
+	((bool TRUE) (int 12))
+	(print (cond (isbool bool)
+		(isint int)
+		(FALSE))))
