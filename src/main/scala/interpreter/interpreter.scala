@@ -38,14 +38,14 @@ private def eval(evalNode: Ast, env: Env): Ast = evalNode match
           argsName = f.args,
           args = args,
           body = f.body,
-          env = env,
+          env = f.executionEnv,
         )
         case f: Func => applyFunction(
           functionName = f.name,
           argsName = f.args,
           args = args,
           body = f.body,
-          env = env,
+          env = f.executionEnv,
         )
         case n => throw NotAFunction(n)
   case quoted: Quoted => quoted.node
@@ -83,10 +83,10 @@ private def eval(evalNode: Ast, env: Env): Ast = evalNode match
     Null(None)
 
   case func: Func =>
-    func.executionEnv = env
+    func.executionEnv = env.copy()
     func
   case lambda: Lambda =>
-    lambda.executionEnv = env
+    lambda.executionEnv = env.copy()
     lambda
   case prog: Prog =>
     env.withTerms(
@@ -96,6 +96,7 @@ private def eval(evalNode: Ast, env: Env): Ast = evalNode match
   case function: StdFunction => function
 
 private def applyFunction(functionName: String, argsName: List[Atom], args: List[Ast], body: Ast, env: Env): Ast =
+  println(s"Apply $functionName, args($args), env = $env")
   if argsName.length != args.length
     then throw WrongArgumentsCount(functionName, argsName.length, args.length)
   val terms = argsName.map(_.value).zip(args)

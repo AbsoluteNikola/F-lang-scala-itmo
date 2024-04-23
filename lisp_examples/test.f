@@ -1,5 +1,8 @@
-(func plus1 (a) (plus b 1))
+(func plus1 (f) (f 1))
 
 (prog
-   ((a 1) (b 3))
-   (plus1 a))
+  ((a 1))
+  (prog
+   ((pa (lambda (x) (plus x a))) (b 3))
+   (plus1 pa)))
+

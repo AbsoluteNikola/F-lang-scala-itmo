@@ -1,16 +1,21 @@
-import scala.collection.mutable.{Map => MuttableMap}
+import org.lambda.flang.interpreter.Env
+import org.lambda.flang
+import org.lambda.flang.Real
 
-val m1 = MuttableMap[String, List[Int]](
-  "x" -> List(1),
-  "y" -> List(2),
+val e = Env()
 
-)
-val m2 = m1.clone()
-println(m1)
-println(m2)
-m1.put("z", List(3))
-println(m1)
-println(m2)
-m1.put("x", List(4))
-println(m1)
-println(m2)
+e.set("x", Real(1, None))
+e.set("y", Real(2, None))
+
+e
+
+val e2 = e.copy()
+e2.set("z", Real(4, None))
+
+e
+e2
+
+e2.set("x", Real(3, None))
+
+e
+e2
