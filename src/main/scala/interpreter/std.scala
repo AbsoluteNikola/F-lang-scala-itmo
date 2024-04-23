@@ -6,41 +6,102 @@ object std {
     functionName: String,
     args: List[Ast],
     intOp: (Int, Int) => Int,
-    intDef: Int,
     realOp: (Double, Double) => Double,
-    realDef: Double,
   ): Ast =
-    val (ints, doubles) = args.zipWithIndex.partitionMap { (node, index) =>
+    val correctArgs = args.zipWithIndex.map { (node, index) =>
       node match
         case n: Integer => Left(n.value)
         case n: Real => Right(n.value)
         case _ => throw WrongArgumentType(functionName, index + 1, "integer or double")
     }
-    if doubles.isEmpty then
-      var res: Int = intDef
-      ints.foreach(x => res = intOp(res, x))
-      new Integer(value = res, ctx = None)
-    else
-      var res: Double = realDef
-      ints.foreach(x => res = realOp(res, x))
+
+    if correctArgs.exists(x =>
+      x match
+        case Left(_) => false
+        case Right(_) => true) then
+      val doubleArgs = correctArgs.map {
+        case Left(i) => i.toDouble
+        case Right(j) => j
+      }
+      var res: Double = doubleArgs.head
+      doubleArgs.tail.foreach(x => res = realOp(res, x))
       new Real(value = res, ctx = None)
+    else
+      val doubleArgs = correctArgs.map {
+        case Left(i) => i
+        case Right(_) => 0
+      }
+      var res: Int = doubleArgs.head
+      doubleArgs.tail.foreach(x => res = intOp(res, x))
+      new Integer(value = res, ctx = None)
+
+  private def compareOperation(
+     functionName: String,
+     args: List[Ast],
+     predicate: Int => Boolean,
+   ): Ast = args match
+    case first :: second :: Nil =>
+      (first, second) match
+        case (a: Comparable, b: Comparable) => FBoolean(predicate(a.compare(b)), ctx = None)
+        case _ => throw WrongComparison(first, second)
+    case _ => throw WrongArgumentsCount(functionName, trueCount = 2, wrongCount = args.length)
 
   def plus(args: List[Ast]): Ast = numberOperation(
     functionName =  "plus",
     args = args,
     intOp = (x, y) => x + y,
-    intDef = 0,
-    realOp = (x, y) => x + y,
-    realDef = 0
+    realOp = (x, y) => x + y
+  )
+
+  def minus(args: List[Ast]): Ast = numberOperation(
+    functionName = "plus",
+    args = args,
+    intOp = (x, y) => x - y,
+    realOp = (x, y) => x - y
   )
 
   def times(args: List[Ast]): Ast = numberOperation(
     functionName =  "times",
     args = args,
     intOp = (x, y) => x * y,
-    intDef = 1,
-    realOp = (x, y) => x * y,
-    realDef = 1
+    realOp = (x, y) => x * y
+  )
+
+  def divide(args: List[Ast]): Ast = numberOperation(
+    functionName = "divide",
+    args = args,
+    intOp = (x, y) => if y != 0 then x / y else throw DivideByZero(),
+    realOp = (x, y) => if y != 0 then x / y else throw DivideByZero()
+  )
+
+  def equal(args: List[Ast]): Ast = compareOperation(
+    functionName = "equal",
+    args = args,
+    predicate = x => x == 0
+  )
+
+  def greater(args: List[Ast]): Ast = compareOperation(
+    functionName = "greater",
+    args = args,
+    predicate = x => x > 0
+  )
+
+  def greaterOrEqual(args: List[Ast]): Ast = compareOperation(
+    functionName = "greaterOrEqual",
+    args = args,
+    predicate = x => x >= 0
+  )
+
+  def less(args: List[Ast]): Ast = compareOperation(
+    functionName = "less",
+    args = args,
+    predicate = x => x < 0
+  )
+
+  def lessOrEqual(args: List[Ast]): Ast = compareOperation(
+    functionName = "lessOrEqual",
+    args = args,
+    predicate = x => x <= 0
   )
 
   def head(args: List[Ast]): Ast =

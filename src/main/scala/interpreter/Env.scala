@@ -35,7 +35,14 @@ class Env {
 object Env:
   private def defaultEnv: MuttableMap[String, Ref] = MuttableMap(
     "plus" -> Ref(StdFunction("plus", std.plus)),
+    "minus" -> Ref(StdFunction("minus", std.minus)),
     "times" -> Ref(StdFunction("times", std.times)),
+    "divide" -> Ref(StdFunction("divide", std.divide)),
+    "equal" -> Ref(StdFunction("equal", std.equal)),
+    "greater" -> Ref(StdFunction("greater", std.greater)),
+    "greaterOrEqual" -> Ref(StdFunction("greaterOrEqual", std.greaterOrEqual)),
+    "less" -> Ref(StdFunction("less", std.less)),
+    "lessOrEqual" -> Ref(StdFunction("lessOrEqual", std.lessOrEqual)),
     "head" -> Ref(StdFunction("head", std.head)),
     "tail" -> Ref(StdFunction("tail", std.tail)),
     "cons" -> Ref(StdFunction("cons", std.cons)),
@@ -46,7 +53,7 @@ object Env:
     "isnull" -> Ref(StdFunction("isnull", std.isNull)),
     "isatom" -> Ref(StdFunction("isatom", std.isAtom)),
     "islist" -> Ref(StdFunction("islist", std.isList)),
-    "print" -> Ref(StdFunction("print", std.isList)),
+    "print" -> Ref(StdFunction("print", std.print)),
   )
 
   private class Ref(value: Ast):
