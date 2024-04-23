@@ -5,6 +5,6 @@
             (a)))
     (helper 1 1 n)))
 
-(print get_n_fibonacci(1))
-(print get_n_fibonacci(4))
-(print get_n_fibonacci(7))
+(print (get_n_fibonacci 1))
+(print (get_n_fibonacci 4))
+(print (get_n_fibonacci 7))

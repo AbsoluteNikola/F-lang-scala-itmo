@@ -41,12 +41,12 @@ object Env:
     "cons" -> Ref(StdFunction("cons", std.cons)),
     "eval" -> Ref(StdFunction("eval", std.cons)),
     "isint"  -> Ref(StdFunction("isint",  std.isInt)),
-    "isReal" -> Ref(StdFunction("isReal", std.isReal)),
+    "isreal" -> Ref(StdFunction("isReal", std.isReal)),
     "isbool" -> Ref(StdFunction("isbool", std.isBool)),
     "isnull" -> Ref(StdFunction("isnull", std.isNull)),
     "isatom" -> Ref(StdFunction("isatom", std.isAtom)),
     "islist" -> Ref(StdFunction("islist", std.isList)),
-    "print" -> Ref(StdFunction("print", std.isList)),
+    "print" -> Ref(StdFunction("print", std.print)),
   )
 
   private class Ref(value: Ast):

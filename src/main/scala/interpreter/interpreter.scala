@@ -5,7 +5,9 @@ import org.lambda.flang.StdFunction
 
 def run(ast: Ast): Ast = eval(ast, Env())
 
-private def eval(evalNode: Ast, env: Env): Ast = evalNode match
+private def eval(evalNode: Ast, env: Env): Ast =
+//  println(s"Evaluating: $evalNode \nEnv: $env\n")
+  evalNode match
   case x: FBoolean => x
   case x: Null => x
   case x: Integer => x
@@ -96,7 +98,7 @@ private def eval(evalNode: Ast, env: Env): Ast = evalNode match
   case function: StdFunction => function
 
 private def applyFunction(functionName: String, argsName: List[Atom], args: List[Ast], body: Ast, env: Env): Ast =
-  println(s"Apply $functionName, args($args), env = $env")
+//  println(s"Apply $functionName, args($args), env = $env")
   if argsName.length != args.length
     then throw WrongArgumentsCount(functionName, argsName.length, args.length)
   val terms = argsName.map(_.value).zip(args)

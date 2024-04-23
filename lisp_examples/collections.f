@@ -40,3 +40,5 @@
 
 (func plus_x (ls x)
   (map ls (lambda (y) (plus x y))))
+
+(plus_x '(1 2 3) 4)
