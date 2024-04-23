@@ -1,4 +1,4 @@
-(func apply1 (a) (a 1))
+(func apply1 (f) (f 1))
 
 (func closure () (prog
   ((a 3))

@@ -54,6 +54,7 @@ object Env:
     "isatom" -> Ref(StdFunction("isatom", std.isAtom)),
     "islist" -> Ref(StdFunction("islist", std.isList)),
     "print" -> Ref(StdFunction("print", std.print)),
+    "trace" -> Ref(StdFunction("trace", std.trace)),
   )
 
   private class Ref(value: Ast):

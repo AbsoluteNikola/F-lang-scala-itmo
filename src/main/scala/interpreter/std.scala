@@ -169,4 +169,10 @@ object std {
      then throw WrongArgumentsCount("print", trueCount = 1, wrongCount = args.length)
     println(args.head)
     Null(None)
+
+  def trace(args: List[Ast]): Ast =
+    if args.length != 1
+     then throw WrongArgumentsCount("trace", trueCount = 1, wrongCount = args.length)
+    println(args.head)
+    args.head
 }

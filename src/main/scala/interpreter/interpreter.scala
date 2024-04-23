@@ -67,7 +67,9 @@ private def eval(evalNode: Ast, env: Env): Ast = evalNode match
         case b: FBoolean => b.value
         case other => throw WrongType("predicate of while", "boolean", other)
       try
-        eval(fWhile.body, env)
+        if pred
+          then eval(fWhile.body, env)
+          else return Null(None)
       catch
         case _: BreakException => return Null(None)
     Null(None)
