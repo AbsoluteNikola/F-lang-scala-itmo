@@ -5,7 +5,7 @@ import grammar.{FlangParser, FlangParserVisitor}
 
 import org.antlr.v4.runtime.{ParserRuleContext, Token}
 import org.antlr.v4.runtime.tree.{ErrorNode, ParseTree, RuleNode, TerminalNode}
-import org.lambda.flang.interpreter.Env
+import org.lambda.flang.interpreter.{Env, WrongComparison}
 
 import scala.collection.immutable as c
 import scala.jdk.CollectionConverters.*
@@ -22,18 +22,40 @@ sealed trait Ast(ctx: Option[ParserRuleContext]) {
     case None => NoPosition()
 }
 
+sealed trait Comparable() extends Ast {
+  def compare(other: Comparable): Int
+}
+
 final class Program(val elements: List[Ast], ctx: ParserRuleContext) extends Ast(Some(ctx)):
   override def toString: String = elements.mkString("\n\n")
 final class FList(val elements: List[Ast], ctx: Option[ParserRuleContext]) extends Ast(ctx):
   override def toString: String = s"(${elements.mkString(" ")})"
-final class FBoolean(val value: Boolean, ctx: Option[ParserRuleContext]) extends Ast(ctx):
+
+final class FBoolean(val value: Boolean, ctx: Option[ParserRuleContext]) extends Ast(ctx), Comparable:
   override def toString: String = s"$value"
+
+  override def compare(other: Comparable): Int = other match
+    case otherFBoolean: FBoolean => value.compare(otherFBoolean.value)
+    case _ => throw WrongComparison(this, other)
+
 final class Null(ctx: Option[ParserRuleContext]) extends Ast(ctx):
   override def toString: String = "null"
-final class Integer(val value: Int, ctx: Option[ParserRuleContext]) extends Ast(ctx):
+final class Integer(val value: Int, ctx: Option[ParserRuleContext]) extends Ast(ctx), Comparable:
   override def toString: String = s"$value"
-final class Real(val value: Double, ctx: Option[ParserRuleContext]) extends Ast(ctx):
+
+  override def compare(other: Comparable): Int = other match
+    case otherInt: Integer => value.compare(otherInt.value)
+    case otherReal: Real => value.toDouble.compare(otherReal.value)
+    case _ => throw WrongComparison(this, other)
+
+final class Real(val value: Double, ctx: Option[ParserRuleContext]) extends Ast(ctx), Comparable:
   override def toString: String = s"$value"
+
+  override def compare(other: Comparable): Int = other match
+    case otherInt: Integer => value.compare(otherInt.value)
+    case otherReal: Real => value.compare(otherReal.value)
+    case _ => throw WrongComparison(this, other)
+
 final class Quoted(val node: Ast, ctx: ParserRuleContext) extends Ast(Some(ctx)):
   override def toString: String = s"'$node"
 final class Atom(val value: String, ctx: ParserRuleContext) extends Ast(Some(ctx)):

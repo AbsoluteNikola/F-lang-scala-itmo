@@ -22,6 +22,15 @@ class WrongArgumentType(val functionName: String, index: Int, typ: String) exten
 class WrongArgumentsCount(val functionName: String, trueCount: Int, wrongCount: Int) extends FlangException:
   override def toString: String = s"Function '$functionName' has $trueCount arguments, not $wrongCount"
 
+class InsufficientArgumentsCount(val functionName: String, currentCount: Int, minCount: Int) extends FlangException:
+  override def toString: String = s"Function '$functionName' has minimum $minCount arguments, but now $currentCount"
+
+class DivideByZero extends FlangException:
+  override def toString: String = s"Trying to divide an integer or Decimal number by zero"
+
+class WrongComparison(val first: Ast, val second: Ast) extends FlangException:
+  override def toString: String = s"Cannot compare '$first' and '$second''"
+
 class EmptyList(val functionName: String) extends FlangException:
   override def toString: String = s"$functionName: List is empty"
 
