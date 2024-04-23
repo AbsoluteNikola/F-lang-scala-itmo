@@ -29,8 +29,7 @@ private def traverse(context: MuttableMap[String, Ast], ast: Ast): List[Shadowin
     traverse(context, fWhile.pred) ++ traverse(context, fWhile.body)
   case fReturn: Return => traverse(context, fReturn.element)
   case d: Do =>
-    val ctxCopy = context.clone()
-    d.statements.flatMap(traverse(ctxCopy, _))
+    d.statements.flatMap(traverse(context, _))
   case setq: Setq =>
     val otherWarnings = traverse(context, setq.value)
     context.put(setq.name.value, setq)

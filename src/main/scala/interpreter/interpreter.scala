@@ -24,8 +24,6 @@ private def eval(evalNode: Ast, env: Env): Ast = evalNode match
   case list: FList =>
     if list.elements.isEmpty
       then list
-    else if list.elements.length == 1
-      then eval(list.elements.head, env)
     else
       val func = eval(list.elements.head, env)
       val args = list.elements.tail.map(eval(_, env))
@@ -45,7 +43,9 @@ private def eval(evalNode: Ast, env: Env): Ast = evalNode match
           body = f.body,
           env = f.executionEnv,
         )
-        case n => throw NotAFunction(n)
+        case n => if list.elements.length == 1
+          then n
+          else throw NotAFunction(n)
   case quoted: Quoted => quoted.node
   case cond: Cond =>
     val pred = eval(cond.pred, env) match

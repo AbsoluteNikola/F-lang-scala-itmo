@@ -64,7 +64,7 @@ final class Setq(val name: Atom, val value: Ast, ctx: ParserRuleContext) extends
   override def toString: String = s"setq $name $value"
 
 final class Do(val statements: List[Ast], ctx: ParserRuleContext) extends Ast(Some(ctx)):
-  override def toString: String = s"do ${statements.map(s => s"($s) ")}"
+  override def toString: String = s"do ${statements.map(s => s"($s)").mkString(" ")}"
 
 final class Func(val name: String, val args: List[Atom], val body: Ast, ctx: ParserRuleContext, var executionEnv: Env) extends Ast(Some(ctx)):
   override def toString: String = s"func $name (${args.mkString(" ")}) (...)"

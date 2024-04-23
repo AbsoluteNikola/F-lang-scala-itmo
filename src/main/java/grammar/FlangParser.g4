@@ -69,7 +69,7 @@ cond : COND element element element?;
 
 while : WHILE element element;
 
-do : element+;
+do : DO element+;
 
 return : RETURN element;
 
