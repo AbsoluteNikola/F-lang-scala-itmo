@@ -62,11 +62,11 @@
     ((a 3) (b 4) (c 5)) 
     ((func is_rightangled (a b c) 
     (cond (less a 1)
-		(FALSE)
+		(false)
 		(cond (less b 1)
-			(FALSE)
+			(false)
 			(cond (less c 1)
-				(FALSE)
+				(false)
 				(equal 
 					(plus (plus (sqr a) (sqr b)) (sqr c)) 
 					(sqr (get_max (get_max a b) c)))))))
@@ -74,7 +74,7 @@
 
 ; should print always true
 (prog 
-	((bool TRUE) (int 12))
+	((bool true) (int 12))
 	(print (cond (isbool bool)
 		(isint int)
-		(FALSE))))
+		(false))))
