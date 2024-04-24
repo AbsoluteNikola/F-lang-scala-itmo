@@ -43,18 +43,22 @@ object Env:
     "greaterOrEqual" -> Ref(StdFunction("greaterOrEqual", std.greaterOrEqual)),
     "less" -> Ref(StdFunction("less", std.less)),
     "lessOrEqual" -> Ref(StdFunction("lessOrEqual", std.lessOrEqual)),
+    "not" -> Ref(StdFunction("not", std.not)),
     "head" -> Ref(StdFunction("head", std.head)),
     "tail" -> Ref(StdFunction("tail", std.tail)),
     "cons" -> Ref(StdFunction("cons", std.cons)),
     "eval" -> Ref(StdFunction("eval", std.cons)),
     "isint"  -> Ref(StdFunction("isint",  std.isInt)),
-    "isreal" -> Ref(StdFunction("isReal", std.isReal)),
+    "isreal" -> Ref(StdFunction("isreal", std.isReal)),
     "isbool" -> Ref(StdFunction("isbool", std.isBool)),
     "isnull" -> Ref(StdFunction("isnull", std.isNull)),
     "isatom" -> Ref(StdFunction("isatom", std.isAtom)),
     "islist" -> Ref(StdFunction("islist", std.isList)),
     "print" -> Ref(StdFunction("print", std.print)),
     "trace" -> Ref(StdFunction("trace", std.trace)),
+    "sqr" -> Ref(StdFunction("sqr", std.sqr)),
+    "sqrt" -> Ref(StdFunction("sqrt", std.sqrt)),
+    "list" -> Ref(StdFunction("list", std.list)),
   )
 
   private class Ref(value: Ast):

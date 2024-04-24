@@ -74,7 +74,7 @@
                         (false)
                         (equal
                             (plus (plus (sqr a) (sqr b)) (sqr c))
-                        (sqr (get_max (get_max a b) c)))))))
+                        (times 2 (sqr (get_max (get_max a b) c))))))))
 	(print (is_rightangled a b c))))
 
 ; should print always true
@@ -88,4 +88,4 @@
 (print (pow 3.0 3))
 (print (pow 3.0 -3))
 
-(print (max_in_list '(1 2 3)))
+(print (max_in_list (list 1 2 3)))

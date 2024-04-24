@@ -16,18 +16,18 @@ def runParser(fileName: String): FlangParser =
 
 @main
 def main(): Unit =
-  val parser = runParser("lisp_examples/roots.f")
+  val parser = runParser("lisp_examples/collections.f")
   val ast = Ast.fromAntlr(parser)
   if parser.getNumberOfSyntaxErrors > 0
     then
-      println("Parer failed")
+      println("Parser failed")
       sys.exit(1)
   val shadowing = semantic.checkShadowing(ast)
   println("Variables shadowing check:")
   shadowing.foreach(println)
 
   val notDeclaredWarnings = semantic.checkForNotDeclared(ast)
-  println("\nAtoms are not declarated check:")
+  println("\nAtoms are not declared check:")
   notDeclaredWarnings.foreach(println)
 
   val unusedWarnings = semantic.checkForUnused(ast)
