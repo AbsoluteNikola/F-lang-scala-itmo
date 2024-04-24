@@ -69,3 +69,6 @@ object Env:
     def get(): Ast = _value
     override def clone(): Ref = this
 
+  def defaultAtoms: List[String] =
+    defaultEnv.keys.toList
+

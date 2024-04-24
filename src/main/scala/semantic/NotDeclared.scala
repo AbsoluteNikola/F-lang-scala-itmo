@@ -1,12 +1,9 @@
 package org.lambda.flang
 package semantic
 
-import scala.collection.mutable.Map as MuttableMap
+import interpreter.Env
 
-val defaultAtoms = Set(
-  "plus", "minus", "equal", "head", "tail", "cons", "isnull", "not", "less", "greater", "times", "divide", "sqrt",
-  "print", "nil"
-)
+import scala.collection.mutable.Map as MuttableMap
 
 final case class AtomNotDeclaredWarning(unexpected: Atom) extends Warning:
   override def toString: String =
@@ -61,7 +58,7 @@ private def checkAtomDeclaration(context: MuttableMap[String, Ast], atom: Atom):
   context.get(atom.value) match
     case Some(value) => None
     case None =>
-      if defaultAtoms.contains(atom.value) then
+      if Env.defaultAtoms.contains(atom.value) then
         None
       else
         Some(AtomNotDeclaredWarning(atom))

@@ -117,7 +117,7 @@ object std {
     args.head match
       case l: FList => l.elements.headOption match
         case Some(x) => x
-        case None => throw EmptyList("head")
+        case None => new Null(None)
       case _ => throw WrongArgumentType("head", 1, "list")
 
   def tail(args: List[Ast]): Ast =
@@ -125,7 +125,7 @@ object std {
       then throw WrongArgumentsCount("tail", trueCount = 1, wrongCount = args.length)
     args.head match
       case l: FList => if l.elements.isEmpty
-        then throw EmptyList("tail")
+        then new Null(None)
         else FList(l.elements.tail, None)
       case _ => throw WrongArgumentType("tail", 1, "list")
 
