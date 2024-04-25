@@ -26,11 +26,15 @@
 	(cond (less a b) a b))
 
 (func max_in_list (lst)
-	((setq max_val (head lst))
-	(while (not (isnull lst))
-		((setq max_val (max max_val (head lst)))
-		(setq lst (tail lst))))
-	max_val))
+    (cond (isnull (head lst))
+        (null)
+        (do
+            (setq max_val (head lst))
+            (while (not (isnull (head lst)))
+                (do
+                    (setq max_val (max max_val (head lst)))
+                    (setq lst (tail lst))))
+        max_val)))
 
 (func pow (x i)
 	(do
@@ -74,7 +78,7 @@
                         (false)
                         (equal
                             (plus (plus (sqr a) (sqr b)) (sqr c))
-                        (sqr (get_max (get_max a b) c)))))))
+                        (times 2 (sqr (get_max (get_max a b) c))))))))
 	(print (is_rightangled a b c))))
 
 ; should print always true
@@ -88,4 +92,4 @@
 (print (pow 3.0 3))
 (print (pow 3.0 -3))
 
-(print (max_in_list '(1 2 3)))
+(print (max_in_list (list 1 2 5.5 42 0.2 -5 3)))

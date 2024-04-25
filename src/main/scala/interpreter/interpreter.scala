@@ -50,7 +50,7 @@ private def eval(evalNode: Ast, env: Env): Ast = evalNode match
   case cond: Cond =>
     val pred = eval(cond.pred, env) match
       case b: FBoolean => b.value
-      case other => throw WrongType("predicate of if", "boolean", other)
+      case other => throw WrongType("predicate of cond", "boolean", other)
     cond.`else` match
       case Some(e) => if pred
         then eval(cond.`then`, env)

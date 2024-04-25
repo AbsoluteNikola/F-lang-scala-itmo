@@ -104,13 +104,20 @@ object std {
     predicate = x => x <= 0
   )
 
+  def not(args: List[Ast]): Ast =
+    if args.length != 1
+      then throw WrongArgumentsCount("not", trueCount = 1, wrongCount = args.length)
+    args.head match
+      case b: FBoolean => FBoolean(!b.value, None)
+      case _ => throw WrongArgumentType("not", 1, "bool")
+
   def head(args: List[Ast]): Ast =
     if args.length != 1
       then throw WrongArgumentsCount("head", trueCount = 1, wrongCount = args.length)
     args.head match
       case l: FList => l.elements.headOption match
         case Some(x) => x
-        case None => throw EmptyList("head")
+        case None => new Null(None)
       case _ => throw WrongArgumentType("head", 1, "list")
 
   def tail(args: List[Ast]): Ast =
@@ -118,14 +125,14 @@ object std {
       then throw WrongArgumentsCount("tail", trueCount = 1, wrongCount = args.length)
     args.head match
       case l: FList => if l.elements.isEmpty
-        then throw EmptyList("tail")
+        then new Null(None)
         else FList(l.elements.tail, None)
       case _ => throw WrongArgumentType("tail", 1, "list")
 
   def cons(args: List[Ast]): Ast =
     if args.length != 2
       then throw WrongArgumentsCount("cons", trueCount = 2, wrongCount = args.length)
-    args(2) match
+    args(1) match
       case l: FList => FList(args.head :: l.elements, None)
       case _ => throw WrongArgumentType("cons", 2, "list")
 
@@ -175,4 +182,34 @@ object std {
      then throw WrongArgumentsCount("trace", trueCount = 1, wrongCount = args.length)
     println(args.head)
     args.head
+
+  def sqr(args: List[Ast]): Ast =
+    if args.length != 1
+      then throw WrongArgumentsCount("sqr", trueCount = 1, wrongCount = args.length)
+
+    args.head match
+      case n: Real => Real(value = n.value * n.value, ctx = None)
+      case n: Integer => new Integer(value = n.value * n.value, ctx = None)
+      case _ => throw WrongArgumentType("sqr", index = 0, typ = "real or integer")
+
+  def sqrt(args: List[Ast]): Ast =
+    if args.length != 1
+      then throw WrongArgumentsCount("sqr", trueCount = 1, wrongCount = args.length)
+
+    args.head match
+      case n: Real => Real(math.sqrt(n.value), ctx = None)
+      case n: Integer => new Real(math.sqrt(n.value), ctx = None)
+      case _ => throw WrongArgumentType("sqr", index = 0, typ = "real or integer")
+
+  def list(args: List[Ast]): Ast =
+    val wrongTypedArgument = args.zipWithIndex.find { (arg, index) =>
+      arg match
+        case n: Real => false
+        case n: Integer => false
+        case n: FBoolean => false
+        case _ => true
+    }
+    if wrongTypedArgument.isDefined then
+      throw WrongArgumentType("list", index = wrongTypedArgument.get._2, typ = wrongTypedArgument.get._1.toString)
+    FList(args, ctx = None)
 }
