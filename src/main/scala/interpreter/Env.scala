@@ -29,6 +29,7 @@ class Env {
       val result = f(this)
       result
     finally
+      terms.foreach((name, _) => if !oldValues.contains(name) then context.remove(name))
       oldValues.foreach((name, value) => context.put(name, value))
 }
 

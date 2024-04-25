@@ -202,14 +202,5 @@ object std {
       case _ => throw WrongArgumentType("sqr", index = 0, typ = "real or integer")
 
   def list(args: List[Ast]): Ast =
-    val wrongTypedArgument = args.zipWithIndex.find { (arg, index) =>
-      arg match
-        case n: Real => false
-        case n: Integer => false
-        case n: FBoolean => false
-        case _ => true
-    }
-    if wrongTypedArgument.isDefined then
-      throw WrongArgumentType("list", index = wrongTypedArgument.get._2, typ = wrongTypedArgument.get._1.toString)
     FList(args, ctx = None)
 }

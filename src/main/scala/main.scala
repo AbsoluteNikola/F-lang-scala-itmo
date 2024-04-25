@@ -16,7 +16,7 @@ def runParser(fileName: String): FlangParser =
 
 @main
 def main(): Unit =
-  val parser = runParser("lisp_examples/test.f")
+  val parser = runParser("lisp_examples/errors/wrong_type_in_cond.f")
   val ast = Ast.fromAntlr(parser)
   if parser.getNumberOfSyntaxErrors > 0
     then

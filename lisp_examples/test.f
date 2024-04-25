@@ -1,1 +1,3 @@
-(cons 42 (list 1 2.4 true))
+(do
+  (setq l (cons (lambda () (print 'hi)) (list 1 2.4 true)))
+  ((head l)))

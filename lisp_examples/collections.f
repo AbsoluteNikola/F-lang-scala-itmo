@@ -26,7 +26,7 @@
 	(do
         (setq cur_ls ls)
         (while (not (isnull (head cur_ls)))
-            (do (print cur_ls) (cond (equal (head cur_ls) x)
+            (do (cond (equal (head cur_ls) x)
                 (return true)
                 (setq cur_ls (tail cur_ls)))))
         (return false)))
@@ -49,15 +49,15 @@
 (func plus_x (ls x)
   (map ls (lambda (y) (plus x y))))
 
-(plus_x (list 1 2 3) 4)
+(print (plus_x (list 1 2 3) 4))
 
-; (func more (x)
-;    (greater x 1))
+(func more (x)
+   (greater x 1))
 
-; (filter (list 1 2 3) more) ; with function more
-; (filter (list 1 2 3) (lambda (x) (greater x 1))) ; with lambda
+(print (filter (list 1 2 3) more)) ; with function more
+(print (filter (list 1 2 3) (lambda (x) (greater x 1)))) ; with lambda
 
-; (map (list 1 2 3) (lambda (x) (times x 2)))
-; (contains (list 1 2 3) 3)
+(print (map (list 1 2 3) (lambda (x) (times x 2))))
+(print (contains (list 1 2 3) 3))
 
-; (get-at (list 1 2 3) 10)
+(print (get-at (list 1 2 3) 10))

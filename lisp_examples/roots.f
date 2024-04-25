@@ -20,4 +20,5 @@
                         ((cons (root_x1 a b D) (cons (root_x2 a b D) ())))))))
 
 
-(print (roots 1 5 4))
+(print (roots 1 2 -3)) ; -3, 1
+(print (roots 1 5 4)) ; -1, -4
