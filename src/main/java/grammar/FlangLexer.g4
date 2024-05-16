@@ -16,6 +16,7 @@ FALSE : 'false';
 // keywords
 QUOTE: 'quote';
 QUOTE_SHORT: '\'';
+DO: 'do';
 SETQ : 'setq';
 FUNC : 'func';
 LAMBDA : 'lambda';

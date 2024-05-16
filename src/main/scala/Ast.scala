@@ -1,38 +1,91 @@
 package org.lambda.flang
 
-import grammar.FlangParser.{ATOM, ElementContext}
+import grammar.FlangParser.ElementContext
 import grammar.{FlangParser, FlangParserVisitor}
 
-import org.antlr.v4.runtime.{ParserRuleContext, Token}
+import org.antlr.v4.runtime.ParserRuleContext
 import org.antlr.v4.runtime.tree.{ErrorNode, ParseTree, RuleNode, TerminalNode}
+import interpreter.{Env, WrongComparison}
 
 import scala.collection.immutable as c
 import scala.jdk.CollectionConverters.*
 
-case class Position(line: Int, positionInLine: Int)
-sealed trait Ast(ctx: ParserRuleContext) {
-  def position: Position = Position(ctx.start.getLine, ctx.start.getCharPositionInLine)
+sealed trait Position
+final case class FilePosition(line: Int, positionInLine: Int) extends Position:
+  override def toString: String = s"$line:${positionInLine + 1}"
+final case class NoPosition() extends Position:
+  override def toString: String = "no position"
+
+sealed trait Ast(ctx: Option[ParserRuleContext]) {
+  def position: Position = ctx match
+    case Some(c) => FilePosition(c.start.getLine, c.start.getCharPositionInLine)
+    case None => NoPosition()
 }
 
-final case class Program(elements: List[Ast], ctx: ParserRuleContext) extends Ast(ctx)
-final case class FList(elements: List[Ast], ctx: ParserRuleContext) extends Ast(ctx)
-final case class BooleanConst(value: Boolean, ctx: ParserRuleContext) extends Ast(ctx)
-final case class NullConst(ctx: ParserRuleContext) extends Ast(ctx)
-final case class IntegerConst(value: Int, ctx: ParserRuleContext) extends Ast(ctx)
-final case class RealConst(value: Double, ctx: ParserRuleContext) extends Ast(ctx)
-final case class Quoted(node: Ast, ctx: ParserRuleContext) extends Ast(ctx)
-final case class Atom(value: String, ctx: ParserRuleContext) extends Ast(ctx)
-final case class Setq(name: Atom, value: Ast, ctx: ParserRuleContext) extends Ast(ctx)
-final case class Func(name: String, args: List[Atom], body: Ast, ctx: ParserRuleContext) extends Ast(ctx)
-final case class Lambda(args: List[Atom], body: Ast, ctx: ParserRuleContext) extends Ast(ctx)
-final case class Prog(
-   context: List[(Atom, Ast)], // list of new variables that will be appeared in body
-   body: Ast,
-   ctx: ParserRuleContext) extends Ast(ctx)
-final case class Cond(pred: Ast, `then`: Ast, `else`: Option[Ast], ctx: ParserRuleContext) extends Ast(ctx)
-final case class While(pred: Ast, body: Ast, ctx: ParserRuleContext) extends Ast(ctx)
-final case class Return(element: Ast, ctx: ParserRuleContext) extends Ast(ctx)
-final case class Break(ctx: ParserRuleContext) extends Ast(ctx)
+sealed trait Comparable() extends Ast {
+  def compare(other: Comparable): Int
+}
+
+final class Program(val elements: List[Ast], ctx: ParserRuleContext) extends Ast(Some(ctx)):
+  override def toString: String = elements.mkString("\n\n")
+final class FList(val elements: List[Ast], ctx: Option[ParserRuleContext]) extends Ast(ctx):
+  override def toString: String = s"(${elements.mkString(" ")})"
+
+final class FBoolean(val value: Boolean, ctx: Option[ParserRuleContext]) extends Ast(ctx), Comparable:
+  override def toString: String = s"$value"
+
+  override def compare(other: Comparable): Int = other match
+    case otherFBoolean: FBoolean => value.compare(otherFBoolean.value)
+    case _ => throw WrongComparison(this, other)
+
+final class Null(ctx: Option[ParserRuleContext]) extends Ast(ctx):
+  override def toString: String = "null"
+final class Integer(val value: Int, ctx: Option[ParserRuleContext]) extends Ast(ctx), Comparable:
+  override def toString: String = s"$value"
+
+  override def compare(other: Comparable): Int = other match
+    case otherInt: Integer => value.compare(otherInt.value)
+    case otherReal: Real => value.toDouble.compare(otherReal.value)
+    case _ => throw WrongComparison(this, other)
+
+final class Real(val value: Double, ctx: Option[ParserRuleContext]) extends Ast(ctx), Comparable:
+  override def toString: String = s"$value"
+
+  override def compare(other: Comparable): Int = other match
+    case otherInt: Integer => value.compare(otherInt.value)
+    case otherReal: Real => value.compare(otherReal.value)
+    case _ => throw WrongComparison(this, other)
+
+final class Quoted(val node: Ast, ctx: ParserRuleContext) extends Ast(Some(ctx)):
+  override def toString: String = s"'$node"
+final class Atom(val value: String, ctx: ParserRuleContext) extends Ast(Some(ctx)):
+  override def toString: String = value
+final class Setq(val name: Atom, val value: Ast, ctx: ParserRuleContext) extends Ast(Some(ctx)):
+  override def toString: String = s"setq $name $value"
+
+final class Do(val statements: List[Ast], ctx: ParserRuleContext) extends Ast(Some(ctx)):
+  override def toString: String = s"do ${statements.map(s => s"($s)").mkString(" ")}"
+
+final class Func(val name: String, val args: List[Atom], val body: Ast, ctx: ParserRuleContext, var executionEnv: Env) extends Ast(Some(ctx)):
+  override def toString: String = s"func $name (${args.mkString(" ")}) (...)"
+final class Lambda(val args: List[Atom], val body: Ast, ctx: ParserRuleContext, var executionEnv: Env) extends Ast(Some(ctx)):
+  override def toString: String = s"lambda (${args.mkString(" ")}) (...)"
+
+final class Prog(
+   val context: List[(Atom, Ast)], // list of new variables that will be appeared in body
+   val body: Ast,
+   ctx: ParserRuleContext) extends Ast(Some(ctx)):
+  override def toString: String = s"prog (${context.map((name, _) => "(name ...)").mkString(" ")}) (...)"
+final class Cond(val pred: Ast, val `then`: Ast, val `else`: Option[Ast], ctx: ParserRuleContext) extends Ast(Some(ctx)):
+  override def toString: String = s"if $pred (...) (...)"
+final class While(val pred: Ast, val body: Ast, ctx: ParserRuleContext) extends Ast(Some(ctx)):
+  override def toString: String = s"while $pred (...)"
+final class Return(val element: Ast, ctx: ParserRuleContext) extends Ast(Some(ctx)):
+  override def toString: String = s"return $element"
+final class Break(ctx: ParserRuleContext) extends Ast(Some(ctx)):
+  override def toString: String = s"break"
+final class StdFunction(val name: String, val evaluator: List[Ast] => Ast) extends Ast(None):
+  override def toString: String = s"standard function $name"
 
 object Ast:
   def fromAntlr(flangParser: FlangParser): Ast = flangParser.program().accept(AntlrAstVisitor())
@@ -47,9 +100,9 @@ object Ast:
       val decls = ctx.element().asScala.map(_.accept(this)).toList
       Program(decls, ctx)
 
-    override def visitAtom(ctx: FlangParser.AtomContext): Ast = 
+    override def visitAtom(ctx: FlangParser.AtomContext): Ast =
       Atom(ctx.ATOM().getText, ctx)
-      
+
     override def visitElement(ctx: FlangParser.ElementContext): Ast =
       if ctx.atom() != null
         then ctx.atom().accept(this)
@@ -66,13 +119,13 @@ object Ast:
 
     override def visitBoolean_const(ctx: FlangParser.Boolean_constContext): Ast =
       if ctx.TRUE() != null
-        then BooleanConst(true, ctx)
-        else BooleanConst(false, ctx)
+        then FBoolean(true, Some(ctx))
+        else FBoolean(false, Some(ctx))
 
     override def visitLiteral(ctx: FlangParser.LiteralContext): Ast =
-      if ctx.NULL() != null then NullConst(ctx)
-      else if ctx.REAL() != null then RealConst(value = ctx.REAL().getText.toDouble, ctx)
-      else if ctx.INTEGER() != null then IntegerConst(value = ctx.INTEGER().getText.toInt, ctx)
+      if ctx.NULL() != null then Null(Some(ctx))
+      else if ctx.REAL() != null then Real(value = ctx.REAL().getText.toDouble, Some(ctx))
+      else if ctx.INTEGER() != null then new Integer(value = ctx.INTEGER().getText.toInt, Some(ctx))
       else if ctx.boolean_const() != null then ctx.boolean_const().accept(this)
       else throw RuntimeException("Unexpected literal, should be impossible")
 
@@ -88,12 +141,12 @@ object Ast:
       val funcName = ctx.atom().ATOM().getText
       val args = visitAtomsListCustom(ctx.atoms_list())
       val body = ctx.element().accept(this)
-      Func(name = funcName, args = args, body = body, ctx)
+      Func(name = funcName, args = args, body = body, ctx, Env())
 
     override def visitLambda(ctx: FlangParser.LambdaContext): Ast =
       val args = visitAtomsListCustom(ctx.atoms_list())
       val body = ctx.element().accept(this)
-      Lambda(args = args, body = body, ctx)
+      Lambda(args = args, body = body, ctx, Env())
 
     override def visitProg(ctx: FlangParser.ProgContext): Ast =
       val progContext = visitProgContextCustom(ctx.prog_context())
@@ -116,7 +169,7 @@ object Ast:
 
     override def visitList(ctx: FlangParser.ListContext): Ast =
       val elements = ctx.element().asScala.map(_.accept(this)).toList
-      FList(elements, ctx)
+      FList(elements, Some(ctx))
 
     override def visitSpecial_form(ctx: FlangParser.Special_formContext): Ast =
       ctx.children.get(0).accept(this);
@@ -139,3 +192,7 @@ object Ast:
       atoms.zip(values)
 
     override def visitBreak(ctx: FlangParser.BreakContext): Ast = Break(ctx)
+
+    override def visitDo(ctx: FlangParser.DoContext): Ast =
+      val statements = ctx.element().asScala.map(_.accept(this)).toList
+      Do(statements, ctx)

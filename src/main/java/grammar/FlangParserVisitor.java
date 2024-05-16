@@ -109,6 +109,12 @@ public interface FlangParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitWhile(FlangParser.WhileContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link FlangParser#do}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDo(FlangParser.DoContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link FlangParser#return}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

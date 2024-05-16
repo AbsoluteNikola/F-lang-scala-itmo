@@ -3,25 +3,25 @@ package semantic
 
 import scala.collection.mutable.Map as MuttableMap
 
-final case class AtomUnusedWarning(unused: Ast) extends Warning:
+final case class AtomUnusedWarning(name: String, node: Ast) extends Warning:
   override def toString: String =
-    s"Object from ${unused.position.line}:${unused.position.positionInLine + 1} is unused."
+    s"'$name' from ${node.position} is unused."
 
 def checkForUnused(ast: Ast): List[AtomUnusedWarning] =
   traverse_u(MuttableMap.empty, ast)
 
 private def traverse_u(context: MuttableMap[String, Ast], ast: Ast): List[AtomUnusedWarning] = ast match
-  case _: BooleanConst => List.empty
-  case _: NullConst => List.empty
-  case _: IntegerConst => List.empty
-  case _: RealConst => List.empty
+  case _: FBoolean => List.empty
+  case _: Null => List.empty
+  case _: Integer => List.empty
+  case _: Real => List.empty
   case atom: Atom =>
     context.remove(atom.value)
     List.empty
   case _: Break => List.empty
   case program: Program =>
     program.elements.flatMap(traverse_u(context, _))
-    context.map((k, v) => AtomUnusedWarning(v)).toList
+    context.map((k, v) => AtomUnusedWarning(k, v)).toList
   case list: FList =>
     list.elements.flatMap(traverse_u(context, _))
   case quoted: Quoted =>
@@ -36,6 +36,9 @@ private def traverse_u(context: MuttableMap[String, Ast], ast: Ast): List[AtomUn
   case setq: Setq =>
     context.put(setq.name.value, setq.name)
     traverse_u(context, setq.value)
+  case d: Do =>
+    val ctxCopy = context.clone()
+    d.statements.flatMap(traverse_u(ctxCopy, _))
   case func: Func =>
     context.put(func.name, func)
     func.args.foreach(x => context.put(x.value, x))

@@ -211,6 +211,18 @@ public class FlangParserBaseListener implements FlangParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterDo(FlangParser.DoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDo(FlangParser.DoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterReturn(FlangParser.ReturnContext ctx) { }
 	/**
 	 * {@inheritDoc}

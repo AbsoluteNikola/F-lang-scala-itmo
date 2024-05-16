@@ -38,6 +38,7 @@ special_form
     | prog
     | cond
     | while
+    | do
     | return
     | break
     ;
@@ -67,6 +68,8 @@ prog : PROG prog_context element; // should be list of pairs (atom, element)
 cond : COND element element element?;
 
 while : WHILE element element;
+
+do : DO element+;
 
 return : RETURN element;
 
