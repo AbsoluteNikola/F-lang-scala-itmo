@@ -1,24 +1,3 @@
-(func sqr (x)
-	(times x x))
-	
-(func sqrt_by_taylor (x)
-	((setq dec_x (minus x 1))
-	(setq sqrt_iter 
-		(lambda (prev n) 
-			(times 
-				prev 
-				(divide
-					(minus 1 (times 2 n))
-					(times 2 (plus n 1))))))
-	(setq n 1)
-	(setq sum 1)
-	(setq prev 1)
-	(while (less n 100)
-	    ((setq prev (sqrt_iter prev n))
-		 (setq sum (plus sum prev))
-		 (setq n (plus n 1))))
-	sum))
-
 (func max (a b)
 	(cond (greater a b) a b))
 

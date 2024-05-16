@@ -12,11 +12,13 @@ def runParser(fileName: String): FlangParser =
   val charStream = CharStreams.fromFileName(fileName)
   val lexer = FlangLexer(charStream)
   val tokenStream = CommonTokenStream(lexer)
+  tokenStream.fill()
+  println(tokenStream.getTokens)
   FlangParser(tokenStream)
 
 @main
 def main(): Unit =
-  val parser = runParser("lisp_examples/errors/wrong_type_in_cond.f")
+  val parser = runParser("lisp_examples/closure.f")
   val ast = Ast.fromAntlr(parser)
   if parser.getNumberOfSyntaxErrors > 0
     then
