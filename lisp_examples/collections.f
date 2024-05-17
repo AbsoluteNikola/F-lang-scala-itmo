@@ -54,9 +54,8 @@
 (func more (x)
    (greater x 1))
 
-(print (filter (list 1 2 3) more)) ; with function more
+(print (filter (list 1 2 3) more))
 (print (filter (list 1 2 3) (lambda (x) (greater x 1)))) ; with lambda
-
 (print (map (list 1 2 3) (lambda (x) (times x 2))))
 (print (contains (list 1 2 3) 3))
 
